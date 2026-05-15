@@ -49,20 +49,10 @@ enumerated in the table.
 | If your session is… | Read these files |
 |---|---|
 | Implementation work without a plan doc to consume | [`docs/agents/shared/workflows/implementation.md`](docs/agents/shared/workflows/implementation.md) |
-| Implementing a documented plan | [`docs/agents/shared/workflows/implementation.md`](docs/agents/shared/workflows/implementation.md) + plan-implementation rules from [`docs/spec/planning/task-plan.md`](docs/spec/planning/task-plan.md) + the plan's own `Cross-Cutting Invariants` and named self-review audits |
+| Implementing a documented plan | [`docs/agents/shared/workflows/implementation.md`](docs/agents/shared/workflows/implementation.md) |
 | Addressing review feedback | [`docs/agents/shared/workflows/review-fixes.md`](docs/agents/shared/workflows/review-fixes.md) |
 | Debugging a failing validation | [`docs/agents/shared/workflows/debugging.md`](docs/agents/shared/workflows/debugging.md) |
 | UI review / screenshot capture (if applicable) | [`docs/agents/shared/workflows/ui-review.md`](docs/agents/shared/workflows/ui-review.md) |
-
-<!--
-  STARTER NOTE on the routing table: the "plan-implementation"
-  row points at `docs/spec/planning/task-plan.md`, which is the
-  default consumer layout for vendored workstream-tracker/spec/.
-  If this repo vendors spec/ elsewhere (e.g., at the repo root in
-  workstream-tracker's own case, or under a different docs subdir),
-  update the link to match. The corresponding manifest field is
-  `spec_root_relpath` in `docs/agents/shared.manifest.yaml`.
--->
 
 Reference files under [`docs/agents/local/reference/`](docs/agents/local/reference/)
 are topic-organized constraint sets specific to this repo. They are
