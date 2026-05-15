@@ -95,7 +95,7 @@ shapes and the unforeseen ones.
 
 The narrow plan-doc Status-block application of this rule
 lives in
-[`workstream-tracker/spec/planning/task-plan.md`](../../../spec/planning/task-plan.md)
+[`workstream-tracker/spec/planning/task-plan.md`]({spec_root}/planning/task-plan.md)
 lines 509-514 ("Do not record commit SHAs in the Status
 block — `git log` and `git blame` are authoritative for
 navigating from plan to history, and recording SHAs creates a

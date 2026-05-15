@@ -1,7 +1,7 @@
 # Proposal: Rule Change — `library/core/pre-edit-gate.md` (Mandatory pre-edit reads)
 
 **Type:** 3 (rule change).
-**Status:** Accepted 2026-05-16 (content landed in `library/`; see CHANGELOG).
+**Status:** Accepted 2026-05-15 (content landed in `library/`; see CHANGELOG).
 **Proposing consumer:** `shared-agent-rules` itself — self-review of v0.0 by the maintainer.
 **Date filed:** 2026-05-15.
 

@@ -14,19 +14,29 @@
 #   shared_agent_rules.version    — CalVer tag (e.g., 2026-05-15)
 #   modules:                       — list of <category>/<name> paths
 #   overlay_root:                  — repo-local overlay root
+#   spec_root_relpath:             — relative path from each vendored
+#                                    shared file to the consumer's vendored
+#                                    workstream-tracker/spec/ root. Used to
+#                                    substitute `{spec_root}` placeholders
+#                                    in cross-references. Defaults to
+#                                    ../../../spec (assumes spec/ vendored
+#                                    to docs/spec/).
 #
 # Writes:
 #   docs/agents/shared/<module-path>.md per module, each prefixed
 #   with a generated-file header naming the source version and
 #   suffixed (if a matching overlay exists) with the overlay
-#   content below a `## Local additions` delimiter.
-
+#   content below a `## Local additions` delimiter. Cross-references
+#   to workstream-tracker/spec/ (written as `{spec_root}/...` in
+#   the source modules) are substituted with the configured relpath.
 #
 # Note on the manifest's `workstream_tracker_spec:` block:
 # That block is documentation-only metadata recording the pinned
-# spec/ version for downstream audit. This script does NOT consume
-# it. Consumers vendor workstream-tracker/spec/ separately (typically
-# into `docs/spec/`) per the design's assumed deployment shape (§2.5).
+# spec/ version for downstream audit. This script does NOT clone
+# or vendor spec/; consumers vendor workstream-tracker/spec/
+# separately. The script does substitute `{spec_root}` placeholders
+# in vendored shared content with the configured relpath, so the
+# cross-references resolve correctly under the consumer's layout.
 
 set -euo pipefail
 
@@ -56,6 +66,8 @@ SOURCE=$(read_field 'shared_agent_rules.source')
 VERSION=$(read_field 'shared_agent_rules.version')
 OVERLAY_ROOT=$(read_field 'overlay_root')
 OVERLAY_ROOT="${OVERLAY_ROOT:-docs/agents/local/overlays/}"
+SPEC_ROOT_RELPATH=$(read_field 'spec_root_relpath')
+SPEC_ROOT_RELPATH="${SPEC_ROOT_RELPATH:-../../../spec}"
 
 if [[ -z "$SOURCE" || -z "$VERSION" ]]; then
   echo "assemble.sh: manifest missing shared_agent_rules.source or .version" >&2
@@ -101,7 +113,7 @@ for module in $MODULES; do
     echo "  or the matching local overlay (see ${OVERLAY_ROOT}${module}.md)."
     echo "-->"
     echo
-    cat "$src"
+    sed "s|{spec_root}|${SPEC_ROOT_RELPATH}|g" "$src"
   } > "$dst"
 
   overlay="${OVERLAY_ROOT%/}/${module}.md"
@@ -110,7 +122,7 @@ for module in $MODULES; do
       echo
       echo "## Local additions"
       echo
-      cat "$overlay"
+      sed "s|{spec_root}|${SPEC_ROOT_RELPATH}|g" "$overlay"
     } >> "$dst"
   fi
 

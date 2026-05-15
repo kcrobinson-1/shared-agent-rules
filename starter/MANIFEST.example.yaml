@@ -16,6 +16,18 @@ workstream_tracker_spec:
   source: github.com/<org>/workstream-tracker
   version: 2026-05-15            # spec/ tracked at the workstream-tracker repo tag
 
+# Relative path from a vendored shared file at
+# docs/agents/shared/<topic>/<file>.md to the consumer's vendored
+# workstream-tracker/spec/ root. The assemble script substitutes
+# `{spec_root}` placeholders in cross-references with this value so
+# they resolve correctly under the consumer's layout.
+#
+# Default (../../../spec) assumes the consumer vendors
+# workstream-tracker/spec/ to docs/spec/. Override for non-standard
+# layouts — e.g., workstream-tracker itself, where spec/ lives at
+# the repo root, uses ../../../../spec.
+spec_root_relpath: ../../../spec
+
 modules:
   # Core (recommended — opt out only with a specific reason)
   - core/pre-edit-gate

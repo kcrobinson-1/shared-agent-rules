@@ -39,6 +39,18 @@ deliberate manifest edit followed by a re-run of
    actually changed in this repo, and review whether the local
    overlays still make sense on top of the new content.
 
+## Same-day changes
+
+Changes that land on the same calendar day stay under that day's
+tag — no per-change bump, no SemVer-style minor/patch reasoning
+on top of the date. The tag and the day are the same artifact.
+
+If a second release truly needs to ship on the same calendar day
+(rare; usually only an urgent fix wedged between two larger
+releases), use a patch suffix: `2026-05-15.1`, `2026-05-15.2`.
+The suffix is the only escape hatch; date components themselves
+never bump for non-date reasons.
+
 ## Single library version
 
 For v0.0 the library ships **one version per release** — all

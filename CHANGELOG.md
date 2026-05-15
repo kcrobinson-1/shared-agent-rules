@@ -3,48 +3,6 @@
 Consumer-visible changes per version. Versions use the CalVer
 format `YYYY-MM-DD` (see [`VERSIONING.md`](VERSIONING.md)).
 
-## v2026-05-16 — Path-trigger drift hardening
-
-Accepted two coupled proposals that harden the path-triggered
-pre-edit-read pattern against codebase drift. Co-dependent: the
-audit relies on the Intent line; the Intent line is most useful
-when an audit checks against it.
-
-### Library changes
-
-- **`core/pre-edit-gate.md`** — "Mandatory pre-edit reads" section
-  rewritten. Every entry now carries three components: **Intent**
-  (one sentence naming what is protected, surface-independent),
-  **Triggers** (one or more deterministic conditions — path globs,
-  content patterns, or file-metadata tags), and **Read** (the
-  constraint set). The pre-edit gate stays mechanically
-  deterministic; drift detection moved out of the gate into the
-  new audit below.
-
-- **`self-review/seed-audits/trigger-map-currency.md`** — new
-  universal seed audit. Fires on diffs that rename trigger-map-
-  referenced directories, move files across top-level directories,
-  introduce new top-level directories, or add files matching the
-  Intent of a trigger-map entry but not its declared Triggers.
-  Treats zero-match triggers as needing classification (Drift /
-  Pre-positioning / Decommissioning) rather than auto-flagging as
-  drift.
-
-### Consumer-visible impact
-
-Consumers that vendored v2026-05-15 should:
-
-- Update each trigger-map entry in their `AGENTS.md` "Mandatory
-  pre-edit reads" section to the new three-component form (Intent
-  / Triggers / Read) when next assembled.
-- Opt into the `self-review/seed-audits/trigger-map-currency`
-  module in their manifest if they want the drift audit.
-
-The starter template's `AGENTS.md` example will be refreshed to
-the three-component form in a follow-up.
-
----
-
 ## v2026-05-15 — Initial release
 
 The first shipped version. Library content derived from a
@@ -55,14 +13,18 @@ design doc into 12 module folders.
 
 **core/**
 
-- `pre-edit-gate.md` — mandatory pre-edit reads, worktree and
-  branch hygiene, read-before-deciding, positive-value check,
-  baseline validation, persistence-layer trust-boundary check.
+- `pre-edit-gate.md` — mandatory pre-edit reads (Intent /
+  Triggers / Read three-component form, with `{spec_root}` and
+  drift handled by the trigger-map-currency audit at self-review
+  time), worktree and branch hygiene, read-before-deciding,
+  positive-value check, baseline validation, persistence-layer
+  trust-boundary check, capture-uncertainty-rather-than-invent.
 - `scope-and-stop.md` — queue-not-license, named-target as
   active boundary, behavior-preserving discipline, grouped
   stop-and-report conditions.
 - `change-boundaries.md` — targeted-fix-over-speculative-
-  refactor, favor maintainable incremental progress.
+  refactor, favor maintainable incremental progress, shared
+  source-of-truth for cross-surface correctness.
 - `anti-patterns.md` — regrouped by organizing principle:
   don't defer validation; don't let supporting artifacts
   drift; don't bundle unrelated cleanup; don't name durable
@@ -76,18 +38,17 @@ design doc into 12 module folders.
 
 **workflows/**
 
-- `implementation.md` — lightweight-vs-full path
-  qualification, the two paths, execution rules, refactor
-  completion proof, feature-time cleanup, versioning and
-  dependency discipline.
+- `implementation.md` — lightweight-vs-full path qualification,
+  the two paths, execution rules, refactor completion proof,
+  feature-time cleanup, versioning and dependency discipline.
 - `debugging.md` — action informed by actual error, mark and
   undo speculative fixes, verify baseline parity.
 - `review-fixes.md` — rigor equal to original implementation,
   audit siblings of same class, new-bug check, review-thread
   state discipline.
 - `ui-review.md` — real browser pass, viewport matching
-  product target, before/after capture, reusable capture
-  flow, screenshot non-commitment.
+  product target, before/after capture, reusable capture flow,
+  screenshot non-commitment.
 
 **self-review/**
 
@@ -95,18 +56,20 @@ design doc into 12 module folders.
   lifecycle, commit-boundary execution. (Deep meta-rule.)
 - `how-to-use.md` — general checklist grouped by correctness
   / drift / downstream impact / scope discipline.
-- `seed-audits/effect-cleanup.md`
-- `seed-audits/error-surfacing-user-mutations.md`
-- `seed-audits/validation-honesty.md`
-- `seed-audits/rename-aware-diff-classification.md`
-- `seed-audits/readiness-gate-truthfulness.md`
+- `seed-audits/effect-cleanup.md`,
+  `seed-audits/error-surfacing-user-mutations.md`,
+  `seed-audits/validation-honesty.md`,
+  `seed-audits/rename-aware-diff-classification.md`,
+  `seed-audits/readiness-gate-truthfulness.md`,
+  `seed-audits/trigger-map-currency.md` — six universal seed
+  audits.
 
 **validation/**
 
 - `philosophy.md` — validation honesty, continuous validation,
-  PR readiness, regression discipline, test boundary
-  discipline (primary home), testing-tier discipline, no
-  prod credentials on laptops.
+  PR readiness, regression discipline, test boundary discipline
+  (primary home), testing-tier discipline, no prod credentials
+  on laptops.
 
 **pr-conventions/**
 
@@ -114,8 +77,7 @@ design doc into 12 module folders.
 - `pr-body-shape.md` — section schema including Estimate
   Deviations (cross-referenced to
   `workstream-tracker/spec/`), never-blank Remaining Risk.
-- `examples/feature-pr.md`
-- `examples/refactor-pr.md`
+- `examples/feature-pr.md`, `examples/refactor-pr.md`.
 
 **doc-currency/**
 
@@ -169,20 +131,34 @@ design doc into 12 module folders.
 - `starter/docs/agents/self-review-catalog.md` — empty
   catalog seeded with imports from the shared seed audits.
 - `starter/MANIFEST.example.yaml` — example consumption
-  manifest, including the `workstream_tracker_spec:` block.
+  manifest with `shared_agent_rules`, `workstream_tracker_spec`,
+  `spec_root_relpath`, modules list, and overlay root.
 
 ### Proposals
 
-- `proposals/README.md` — channel description.
-- `proposals/template-new-audit.md` — type-2 proposal
-  template.
-- `proposals/template-rule-change.md` — type-3 proposal
-  template.
+- `proposals/README.md` — channel description, including the
+  lifecycle convention (active at root, accepted moved to
+  `proposals/decisions/`, abandoned removed via `git rm` with
+  rationale in the closing commit message).
+- `proposals/template-new-audit.md`, `proposals/
+  template-rule-change.md` — type-2 and type-3 templates.
+- `proposals/decisions/` — design records for accepted
+  proposals.
 
 ### Scripts
 
-- `scripts/assemble.sh` — manifest-driven vendoring script
-  with overlay support and generated-file headers.
+- `scripts/assemble.sh` — manifest-driven vendoring with
+  overlay support, generated-file headers, and `{spec_root}`
+  substitution so cross-references to `workstream-tracker/
+  spec/` resolve correctly under any consumer layout.
+
+### Genesis
+
+- `genesis/audit-neighborly-rule-inventory.md`,
+  `genesis/design-repo-design.md`,
+  `genesis/verification-report.md` — the audit, design, and
+  verification reports that produced this initial state,
+  preserved for traceability of rule provenance.
 
 ### Out of scope (handled in workstream-tracker/spec/)
 

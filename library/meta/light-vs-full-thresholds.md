@@ -34,7 +34,7 @@ process?" question but answer it for different work:
   changes, local test surface).
 
 - **Narrow-surface plan skipping** (in
-  [`workstream-tracker/spec/planning/task-plan.md`](../../../spec/planning/task-plan.md)
+  [`workstream-tracker/spec/planning/task-plan.md`]({spec_root}/planning/task-plan.md)
   "Narrow-surface plans may skip the scoping doc") — gates
   whether a *planned task or phase* writes a scoping doc.
   The threshold there governs scoping-artifact necessity, not

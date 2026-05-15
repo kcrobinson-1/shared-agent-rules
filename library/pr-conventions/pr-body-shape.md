@@ -64,7 +64,7 @@ deviation, the actual outcome, and why the call was right.
 
 Rule deviations are not handled here — they require a
 plan-doc change in the same change per
-[`workstream-tracker/spec/planning/task-plan.md`](../../../spec/planning/task-plan.md)
+[`workstream-tracker/spec/planning/task-plan.md`]({spec_root}/planning/task-plan.md)
 "Plan-to-PR Completion Gate." Estimate deviations are normal
 and reported here; rule deviations are not normal and require
 fixing the plan.
