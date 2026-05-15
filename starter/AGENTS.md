@@ -49,10 +49,20 @@ enumerated in the table.
 | If your session is… | Read these files |
 |---|---|
 | Implementation work without a plan doc to consume | [`docs/agents/shared/workflows/implementation.md`](docs/agents/shared/workflows/implementation.md) |
-| Implementing a documented plan | [`docs/agents/shared/workflows/implementation.md`](docs/agents/shared/workflows/implementation.md) + the plan-implementation rules from `workstream-tracker/spec/planning/task-plan.md` + the plan's own `Cross-Cutting Invariants` and named self-review audits |
+| Implementing a documented plan | [`docs/agents/shared/workflows/implementation.md`](docs/agents/shared/workflows/implementation.md) + plan-implementation rules from [`docs/spec/planning/task-plan.md`](docs/spec/planning/task-plan.md) + the plan's own `Cross-Cutting Invariants` and named self-review audits |
 | Addressing review feedback | [`docs/agents/shared/workflows/review-fixes.md`](docs/agents/shared/workflows/review-fixes.md) |
 | Debugging a failing validation | [`docs/agents/shared/workflows/debugging.md`](docs/agents/shared/workflows/debugging.md) |
 | UI review / screenshot capture (if applicable) | [`docs/agents/shared/workflows/ui-review.md`](docs/agents/shared/workflows/ui-review.md) |
+
+<!--
+  STARTER NOTE on the routing table: the "plan-implementation"
+  row points at `docs/spec/planning/task-plan.md`, which is the
+  default consumer layout for vendored workstream-tracker/spec/.
+  If this repo vendors spec/ elsewhere (e.g., at the repo root in
+  workstream-tracker's own case, or under a different docs subdir),
+  update the link to match. The corresponding manifest field is
+  `spec_root_relpath` in `docs/agents/shared.manifest.yaml`.
+-->
 
 Reference files under [`docs/agents/local/reference/`](docs/agents/local/reference/)
 are topic-organized constraint sets specific to this repo. They are
@@ -61,18 +71,39 @@ not optional lookups; the workflow files name when each fires.
 ## Mandatory pre-edit reads
 
 <!--
-  REPO-SPECIFIC. List path-triggered reads, applying the pattern
-  from docs/agents/shared/core/pre-edit-gate.md.
+  REPO-SPECIFIC. List mandatory pre-edit reads in the three-
+  component form (Intent / Triggers / Read) defined in
+  [`docs/agents/shared/core/pre-edit-gate.md`](docs/agents/shared/core/pre-edit-gate.md)
+  "Mandatory pre-edit reads."
 
   Example shape:
-    - `docs/agents/local/reference/architecture-guardrails.md` is
-      mandatory pre-edit reading for any session whose diff
-      intersects `<paths>`.
-    - `docs/agents/local/reference/styling-tokens.md` is mandatory
-      pre-edit reading for any session whose diff intersects
-      styling surfaces.
 
-  Treat each listed file as binding, not optional.
+  ### architecture-guardrails
+
+  Intent: changes to cross-surface responsibility splits or
+  shared-source-of-truth modules invoke architecture review.
+  Triggers:
+    - apps/web/**
+    - apps/server/**
+    - shared/**
+  Read: docs/agents/local/reference/architecture-guardrails.md
+
+  ### styling-tokens
+
+  Intent: changes to styling tokens or surfaces that consume them
+  must respect the token discipline.
+  Triggers:
+    - apps/web/src/styles/**
+    - any `*.scss` file
+  Read: docs/agents/local/reference/styling-tokens.md
+
+  Treat each listed file as binding, not optional. The Intent
+  line is what the trigger-map-currency audit checks against —
+  see
+  [`docs/agents/shared/self-review/seed-audits/trigger-map-currency.md`](docs/agents/shared/self-review/seed-audits/trigger-map-currency.md).
+  Triggers may be path globs (canonical), content patterns, or
+  metadata tags — pick the trigger style that proxies the Intent
+  most robustly against codebase drift.
 -->
 
 ## Universal session rules

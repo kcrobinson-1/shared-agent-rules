@@ -19,7 +19,7 @@ This directory holds:
 - **Persistence-layer rules.** Migration discipline, schema
   conventions, trust-boundary specifics for the data store
   the repo uses.
-- **Any other path-triggered binding constraint set** named in
+- **Any other binding constraint set** named in
   the root `AGENTS.md` "Mandatory pre-edit reads" section.
 
 These files are loaded at the moment named in the relevant

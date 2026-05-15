@@ -35,6 +35,12 @@ diff surface, the same way as repo-specific audits below.
 - **readiness-gate-truthfulness** — a gate that announces
   readiness must actually verify the named conditions, not
   announce on best-effort.
+- **trigger-map-currency** — when the codebase restructures
+  (renamed/moved directories, new top-level dirs, new files
+  matching a declared Intent), the Mandatory pre-edit reads
+  trigger map is re-evaluated against the new state so
+  deterministic triggers do not silently drift away from their
+  Intent.
 
 See [`shared/self-review/seed-audits/`](shared/self-review/seed-audits/)
 for each audit's Trigger / Check / Example.

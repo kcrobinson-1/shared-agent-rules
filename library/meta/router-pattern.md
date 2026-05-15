@@ -57,7 +57,7 @@ concrete embodiment of the router pattern. It ships with:
   deleted if not applicable, rows added if the repo has
   novel session types).
 - A "Mandatory pre-edit reads" placeholder where the
-  consumer lists path-triggered binding reads.
+  consumer lists mandatory pre-edit reads in the three-component form (Intent / Triggers / Read).
 - A "Self-review" section pointing at the catalog
   mechanism in this library and the consumer's local
   catalog.

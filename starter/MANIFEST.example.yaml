@@ -52,6 +52,7 @@ modules:
   - self-review/seed-audits/validation-honesty
   - self-review/seed-audits/rename-aware-diff-classification
   - self-review/seed-audits/readiness-gate-truthfulness
+  - self-review/seed-audits/trigger-map-currency
 
   # Validation, PR conventions, doc-currency, code-docs, testing
   - validation/philosophy
