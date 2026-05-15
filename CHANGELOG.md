@@ -3,6 +3,48 @@
 Consumer-visible changes per version. Versions use the CalVer
 format `YYYY-MM-DD` (see [`VERSIONING.md`](VERSIONING.md)).
 
+## v2026-05-16 — Path-trigger drift hardening
+
+Accepted two coupled proposals that harden the path-triggered
+pre-edit-read pattern against codebase drift. Co-dependent: the
+audit relies on the Intent line; the Intent line is most useful
+when an audit checks against it.
+
+### Library changes
+
+- **`core/pre-edit-gate.md`** — "Mandatory pre-edit reads" section
+  rewritten. Every entry now carries three components: **Intent**
+  (one sentence naming what is protected, surface-independent),
+  **Triggers** (one or more deterministic conditions — path globs,
+  content patterns, or file-metadata tags), and **Read** (the
+  constraint set). The pre-edit gate stays mechanically
+  deterministic; drift detection moved out of the gate into the
+  new audit below.
+
+- **`self-review/seed-audits/trigger-map-currency.md`** — new
+  universal seed audit. Fires on diffs that rename trigger-map-
+  referenced directories, move files across top-level directories,
+  introduce new top-level directories, or add files matching the
+  Intent of a trigger-map entry but not its declared Triggers.
+  Treats zero-match triggers as needing classification (Drift /
+  Pre-positioning / Decommissioning) rather than auto-flagging as
+  drift.
+
+### Consumer-visible impact
+
+Consumers that vendored v2026-05-15 should:
+
+- Update each trigger-map entry in their `AGENTS.md` "Mandatory
+  pre-edit reads" section to the new three-component form (Intent
+  / Triggers / Read) when next assembled.
+- Opt into the `self-review/seed-audits/trigger-map-currency`
+  module in their manifest if they want the drift audit.
+
+The starter template's `AGENTS.md` example will be refreshed to
+the three-component form in a follow-up.
+
+---
+
 ## v2026-05-15 — Initial release
 
 The first shipped version. Library content derived from a

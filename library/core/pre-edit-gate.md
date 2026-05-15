@@ -9,22 +9,53 @@ files.
 
 Some files in a consuming repo are designated as **mandatory pre-edit
 reads**: topic-organized constraint sets that must be read end-to-end
-before the first edit when the diff surface intersects a named set of
-paths.
+before the first edit when the diff intersects a named trigger. The
+trigger may be a path glob, a content pattern, or a file-metadata tag
+— whichever proxies the underlying intent most robustly against
+codebase drift.
 
-The pattern is:
+Every mandatory pre-edit read entry in the consuming repo's `AGENTS.md`
+carries three components:
 
-> `<repo>/docs/agents/local/reference/<topic>.md` is a mandatory
-> pre-edit read for any session whose diff surface intersects
-> `<paths>`. Read end-to-end before the first edit. It is not an
-> optional lookup.
+- **Intent.** One sentence naming what the rule protects against, in
+  surface-independent terms. The intent is what survives when the
+  trigger drifts; it is also what a drift-detection audit (see
+  [`../self-review/seed-audits/trigger-map-currency.md`](../self-review/seed-audits/trigger-map-currency.md))
+  compares against to find gaps.
+- **Triggers.** One or more deterministic conditions that fire the
+  rule. Path globs are the canonical form; alternatives are
+  acceptable and preferred when the intent maps to file content or
+  metadata more robustly than to a directory location. Examples: a
+  path glob (`supabase/migrations/**`), a content pattern (any file
+  containing `CREATE POLICY`), a frontmatter tag
+  (`@stability: contract`).
+- **Read.** The constraint set the agent must read end-to-end before
+  the first edit on a matching diff.
+
+The canonical written form:
+
+```
+### <topic>
+
+Intent: <one sentence naming what is protected>.
+Triggers:
+  - <path glob, content pattern, or metadata tag>
+  - ...
+Read: <repo>/docs/agents/local/reference/<topic>.md
+```
+
+When the diff matches any trigger, the read is mandatory and not an
+optional lookup. Drift between an entry's Intent and its Triggers —
+surfaces that match the intent but escape all triggers, or triggers
+that no longer match the surface they were written for — is detected
+by the trigger-map-currency audit, not by the pre-edit gate itself.
+The gate stays mechanically deterministic; drift detection runs
+retroactively at self-review time.
 
 The consuming repo's `AGENTS.md` declares the binding list under its
 "Mandatory pre-edit reads" section. The list lives there, not here, so
-the path-to-topic mapping is single-source-of-truth in the consuming
-repo. When in doubt about whether a topic applies, treat any
-intersection of the diff surface with a named path as triggering the
-read.
+the intent-trigger-read mapping is single-source-of-truth in the
+consuming repo.
 
 ## Worktree and branch hygiene
 

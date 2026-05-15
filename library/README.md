@@ -68,10 +68,11 @@ Catalog mechanism plus universal seed audits.
   checklist grouped by correctness / drift / downstream
   impact / scope discipline; trust-boundary and
   testing/tooling additions.
-- [`seed-audits/`](self-review/seed-audits/) — five
+- [`seed-audits/`](self-review/seed-audits/) — six
   universal seed audits (effect cleanup, error surfacing for
   user-initiated mutations, validation honesty, rename-aware
-  diff classification, readiness-gate truthfulness).
+  diff classification, readiness-gate truthfulness, trigger-map
+  currency).
 
 ### `validation/`
 
