@@ -1,0 +1,29 @@
+# Commit Message Conventions
+
+## Use Conventional Commits
+
+Use the [Conventional Commits](https://www.conventionalcommits.org/)
+convention for commit messages.
+
+The format keeps history scannable, lets tooling parse change
+classes for changelog generation, and forces the author to name
+the kind of change (`feat`, `fix`, `refactor`, `docs`, `chore`,
+etc.) explicitly in the subject line. The named-change-class
+discipline matters more than any specific tool that consumes it.
+
+If the consuming repo has additional commit conventions
+(scope-name conventions, footer requirements, sign-off
+expectations), they live in the repo's own local overlay or
+contributor-workflow doc. This module is the universal floor.
+
+## Cross-references
+
+- [`pr-body-shape.md`](pr-body-shape.md) for the corresponding
+  change-description schema.
+- [`../workflows/implementation.md`](../workflows/implementation.md)
+  for the multi-commit discipline that interacts with commit
+  conventions.
+
+---
+
+_Audit IDs: R-124._
