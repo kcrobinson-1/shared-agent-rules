@@ -133,6 +133,12 @@ design doc into 12 module folders.
 - `starter/MANIFEST.example.yaml` — example consumption
   manifest with `shared_agent_rules`, `workstream_tracker_spec`,
   `spec_root_relpath`, modules list, and overlay root.
+- `starter/docs/dev.md` — recommended contributor-workflow
+  skeleton (Purpose / Tooling / Repo Shape / Local Workflow /
+  Validation Commands / Self-Review Before Push / Release Flow /
+  Troubleshooting, with optional UI Review / Fresh Deployment From
+  A Fork / Next Engineering Phase). Project-specific sections as
+  placeholders; shared-library cross-references pre-filled.
 
 ### Proposals
 

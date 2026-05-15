@@ -25,13 +25,17 @@ map.
 
 ## Development workflow source of truth
 
-<!--
-  REPO-SPECIFIC. Name the canonical contributor-workflow doc for
-  this repo (commonly `docs/dev.md` or equivalent).
+[`docs/dev.md`](docs/dev.md) is the contributor-workflow source of
+truth for this repo. It handles human contributor procedure (local
+setup, validation commands, release flow); this AGENTS.md handles
+agent decision discipline. The two are jointly authoritative — if
+they conflict, stop and report rather than picking a side.
 
-  When agent rules in this file conflict with the contributor-
-  workflow doc, stop and report the conflict instead of picking a
-  side. The two are intended to be jointly authoritative.
+<!--
+  REPO-SPECIFIC. The starter ships docs/dev.md as a recommended
+  structure; fill it in before the first agent session lands real
+  changes. If you rename or relocate the contributor-workflow doc,
+  update the reference above accordingly.
 -->
 
 <!-- audit-coverage: R-02 (agent-rule vs contributor-doc conflict → stop and report) -->
