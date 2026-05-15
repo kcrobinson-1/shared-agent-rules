@@ -83,10 +83,12 @@ what each audit means.
   audits.
 - [`seed-audits/`](seed-audits/) for the shipped universal seed
   audits.
-- [`../../proposals/`](../../proposals/) for the type-2 (new
-  audit) and type-3 (rule change) proposal channels — outputs
-  the agent files when a self-review finding generalizes beyond
-  the firing session.
+
+When a self-review finding generalizes beyond the firing session,
+the agent files a type-2 (new audit) or type-3 (rule change)
+proposal in the repo's configured proposal channel — see
+[`../meta/rule-additions.md`](../meta/rule-additions.md) for the
+forced-trade-off discipline that governs new rule additions.
 
 ---
 

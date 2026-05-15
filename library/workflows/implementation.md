@@ -110,6 +110,23 @@ name each gate's threshold and call out where they differ — see
 If you discover that the current docs no longer describe the code
 accurately, fix the docs in the same change when practical.
 
+## When the work implements a documented plan
+
+If this session is implementing a plan from the consumer's plan-doc
+system, additional rules apply on top of the general discipline below.
+Load the implementing-agent rules in
+[`{spec_root}/planning/task-plan.md`]({spec_root}/planning/task-plan.md)
+("Plan-to-PR Completion Gate" section) alongside this file — they
+cover reading the plan in full, walking its `Cross-Cutting Invariants`
+section at every call site, the fix-the-plan-first discipline when
+reality diverges, and running the plan's named self-review audits at
+commit time.
+
+The plan doc itself is also part of the read set on every
+implementing session: its `Cross-Cutting Invariants` and named
+self-review audits are session-specific and must be loaded before the
+first edit.
+
 ## Execution Rules
 
 The rules below apply to both paths. They are the "how to actually

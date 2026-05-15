@@ -91,6 +91,15 @@ if [[ ! -d "$WORKTREE" ]]; then
   git clone "https://${SOURCE}.git" "$WORKTREE"
 fi
 git -C "$WORKTREE" fetch --tags >/dev/null 2>&1 || true
+
+# Verify the pinned version exists before checking out.
+if ! git -C "$WORKTREE" rev-parse --verify "$VERSION" >/dev/null 2>&1; then
+  echo "assemble.sh: version '$VERSION' not found in $SOURCE." >&2
+  echo "  - The maintainer may not have cut tag '$VERSION' yet — check $SOURCE/tags." >&2
+  echo "  - Or pin to 'main' in the manifest for dev (defeats CalVer pinning; development only)." >&2
+  exit 2
+fi
+
 git -C "$WORKTREE" checkout --quiet "$VERSION"
 
 SHARED_OUT="docs/agents/shared"

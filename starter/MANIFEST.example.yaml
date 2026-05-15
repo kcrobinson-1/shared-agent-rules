@@ -19,14 +19,18 @@ workstream_tracker_spec:
 # Relative path from a vendored shared file at
 # docs/agents/shared/<topic>/<file>.md to the consumer's vendored
 # workstream-tracker/spec/ root. The assemble script substitutes
-# `{spec_root}` placeholders in cross-references with this value so
-# they resolve correctly under the consumer's layout.
+# `{spec_root}` placeholders in cross-references with this value
+# so they resolve correctly under the consumer's layout.
 #
-# Default (../../../spec) assumes the consumer vendors
-# workstream-tracker/spec/ to docs/spec/. Override for non-standard
-# layouts — e.g., workstream-tracker itself, where spec/ lives at
-# the repo root, uses ../../../../spec.
+# Pick the line that matches your repo's spec/ location:
+
+# If you vendor workstream-tracker/spec/ to docs/spec/ (default):
 spec_root_relpath: ../../../spec
+
+# If spec/ lives at the repo root (workstream-tracker itself, or
+# any consumer with that layout): uncomment the line below and
+# comment out the line above.
+# spec_root_relpath: ../../../../spec
 
 modules:
   # Core (recommended — opt out only with a specific reason)
