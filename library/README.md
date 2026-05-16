@@ -143,6 +143,26 @@ Rules about how rules are organized.
   recommended-but-optional convention; powers the trigger-
   driven form of the doc-currency rule.
 
+## Cross-references between modules
+
+Modules cross-reference each other unconditionally — a module
+never has to know which other modules a particular consumer
+opted out of. `scripts/assemble.sh` handles the bookkeeping:
+after vendoring, it scans each vendored file for Markdown links
+whose target points to an upstream module the consumer's
+manifest did not include, and rewrites `[text](path)` to plain
+`text`. The reference survives as readable prose; the broken
+link does not.
+
+Authoring note: when a cross-reference points to an opt-in
+module (one commented out in `starter/MANIFEST.example.yaml`),
+write **descriptive link text** rather than the path-as-text
+convention used elsewhere. The stripped prose then reads
+naturally — `[Doc Ownership Table convention](../meta/doc-ownership-table.md)`
+strips to `Doc Ownership Table convention`, while
+`` [`../meta/doc-ownership-table.md`](../meta/doc-ownership-table.md) ``
+would strip to a leaky-looking `` `../meta/doc-ownership-table.md` ``.
+
 ## Versioning
 
 The library ships as one version per release. See
