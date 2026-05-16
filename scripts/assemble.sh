@@ -37,6 +37,15 @@
 # separately. The script does substitute `{spec_root}` placeholders
 # in vendored shared content with the configured relpath, so the
 # cross-references resolve correctly under the consumer's layout.
+#
+# Optional-module cross-references:
+# Library modules cross-reference each other unconditionally — a
+# module never has to know which other modules the consumer opted
+# out of. After vendoring, this script scans each vendored file
+# for Markdown links whose target resolves to an upstream module
+# that the manifest did NOT include, and converts those links to
+# plain prose (link text only). The reference survives as readable
+# text; the broken link does not.
 
 set -euo pipefail
 
@@ -136,6 +145,60 @@ for module in $MODULES; do
   fi
 
   echo "wrote $dst"
+done
+
+# Strip cross-references to upstream modules the manifest didn't include.
+# Library content cross-references modules unconditionally; the assemble
+# step rewrites `[text](path-to-missing-module.md)` to plain `text` so
+# vendored output stays self-consistent regardless of the consumer's
+# opt-in / opt-out choices.
+ALL_UPSTREAM_MODULES=$(cd "$WORKTREE/library" && find . -name '*.md' -type f \
+  | sed -E 's|^\./||; s|\.md$||' | sort)
+VENDORED_SET=$(printf '%s\n' $MODULES | sort -u)
+MISSING_MODULES=$(comm -23 \
+  <(printf '%s\n' "$ALL_UPSTREAM_MODULES") \
+  <(printf '%s\n' "$VENDORED_SET"))
+
+# compute_relpath FROM TO — relative path from the directory of FROM
+# to TO. Both args are slash-separated relative paths under $SHARED_OUT.
+compute_relpath() {
+  local from_dir to from_parts to_parts i j result
+  from_dir="$(dirname "$1")"
+  to="$2"
+  if [[ "$from_dir" == "." ]]; then
+    from_parts=()
+  else
+    IFS=/ read -ra from_parts <<< "$from_dir"
+  fi
+  IFS=/ read -ra to_parts <<< "$to"
+  i=0
+  while [[ $i -lt ${#from_parts[@]} && $i -lt ${#to_parts[@]} \
+        && "${from_parts[$i]}" == "${to_parts[$i]}" ]]; do
+    ((i++))
+  done
+  result=""
+  j=$i
+  while [[ $j -lt ${#from_parts[@]} ]]; do
+    result="../$result"
+    ((j++))
+  done
+  while [[ $i -lt ${#to_parts[@]} ]]; do
+    result="${result}${to_parts[$i]}/"
+    ((i++))
+  done
+  echo "${result%/}"
+}
+
+for module in $MISSING_MODULES; do
+  missing_path="${module}.md"
+  while IFS= read -r -d '' vendored_file; do
+    rel_vendored="${vendored_file#$SHARED_OUT/}"
+    target_link=$(compute_relpath "$rel_vendored" "$missing_path")
+    esc=$(printf '%s\n' "$target_link" | sed 's/[][\/.^$*]/\\&/g')
+    tmp=$(mktemp)
+    sed -E "s|\\[([^]]*)\\]\\(${esc}(#[^)]*)?\\)|\\1|g" "$vendored_file" > "$tmp"
+    mv "$tmp" "$vendored_file"
+  done < <(find "$SHARED_OUT" -name '*.md' -type f -print0)
 done
 
 echo "done. shared-agent-rules v${VERSION} vendored into ${SHARED_OUT}/"

@@ -38,14 +38,13 @@ this doc when X happens" — that fires as part of the change
 that makes X happen. The trigger pattern lives here; the
 per-doc list lives per-repo.
 
-This pattern depends on the optional **Doc Ownership Table**
-convention (see
-[`../meta/doc-ownership-table.md`](../meta/doc-ownership-table.md)):
-each canonical doc has a named owner and an explicit
-trigger list. Repos that adopt the ownership-table convention
-get the full trigger-driven version of this rule; repos that
-skip it apply the general "keep docs synchronized" principle
-above without the per-doc trigger granularity.
+This pattern depends on the optional
+[Doc Ownership Table convention](../meta/doc-ownership-table.md):
+each canonical doc has a named owner and an explicit trigger
+list. Repos that adopt the ownership-table convention get the
+full trigger-driven version of this rule; repos that skip it
+apply the general "keep docs synchronized" principle above
+without the per-doc trigger granularity.
 
 For most consuming repos, the durable docs that warrant
 trigger lists include some subset of:
@@ -88,9 +87,9 @@ reflect the new state, not when the code change is done.
 - [`ephemeral-identifiers.md`](ephemeral-identifiers.md) for
   the related "don't embed PR numbers / commit IDs in durable
   docs" rule.
-- [`../meta/doc-ownership-table.md`](../meta/doc-ownership-table.md)
-  for the optional Doc Ownership Table convention this
-  module's trigger-list pattern depends on.
+- [Doc Ownership Table convention](../meta/doc-ownership-table.md)
+  — optional convention this module's trigger-list pattern
+  depends on (consumer manifests may omit it).
 - [`../validation/philosophy.md`](../validation/philosophy.md)
   for the sibling validation gate.
 - [`../code-docs/code-comments.md`](../code-docs/code-comments.md)

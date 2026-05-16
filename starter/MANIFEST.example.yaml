@@ -46,7 +46,7 @@ modules:
   - workflows/implementation
   - workflows/debugging
   - workflows/review-fixes
-  # - workflows/ui-review     # opt out if the repo has no UI
+  - workflows/ui-review        # comment out if the repo has no UI
 
   # Self-review (catalog mechanism + general checklist + seed audits)
   - self-review/mechanism

@@ -57,11 +57,14 @@ CONSUMER="$TMP/consumer"
 mkdir -p "$CONSUMER/docs/agents"
 cp -r "$STARTER_DIR/." "$CONSUMER/"
 
-# 3. Write the consumer's manifest. The fixture enables the MAXIMAL
-#    module set — both the recommended modules and the example
-#    manifest's opt-in/opt-out lines — so the validator answers
-#    "do all links in the maximal vendored tree resolve?". The
-#    awk pass uncomments commented-out module lines under modules:.
+# 3. Write the consumer's manifest. The fixture uses the example
+#    manifest's defaults — only the uncommented modules are vendored.
+#    This matches the day-one consumer experience: copy starter/,
+#    run assemble against the example manifest. The assemble step's
+#    link-strip pass (see scripts/assemble.sh) handles cross-references
+#    to opt-in modules the example manifest skips by default, so
+#    "all links resolve" means "the canonical day-one tree is
+#    self-consistent."
 {
   echo "shared_agent_rules:"
   echo "  source: local/fixture"
@@ -73,12 +76,6 @@ cp -r "$STARTER_DIR/." "$CONSUMER/"
     /^modules:/ { in_modules=1; next }
     /^[a-zA-Z_]+:/ { in_modules=0 }
     in_modules && match($0, /^[[:space:]]*-[[:space:]]+/) {
-      sub(/[[:space:]]*#.*$/, "");
-      print "  " $0
-      next
-    }
-    in_modules && match($0, /^[[:space:]]*#[[:space:]]*-[[:space:]]+/) {
-      sub(/^[[:space:]]*#[[:space:]]*/, "");
       sub(/[[:space:]]*#.*$/, "");
       print "  " $0
     }
