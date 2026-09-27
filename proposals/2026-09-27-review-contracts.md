@@ -1,7 +1,7 @@
 # Proposal: Rule Change — review the affected contract
 
 **Type:** 3 (rule change).
-**Status:** Draft — prepared for maintainer review.
+**Status:** Under review — draft proposal PR open.
 **Proposing consumer:** music-manager-app.
 **Date filed:** 2026-09-27.
 
@@ -192,3 +192,14 @@ No branch was pushed and no PR was created. The prepared PR body is
 `/private/tmp/agent-review-consumer-pr.md`. Publication needs the user's explicit
 approval of those payloads and repositories. This is an external handoff gate,
 not an incomplete implementation or a failed validation check.
+
+### Authorized publication — 2026-09-27
+
+The user approved both prepared branches and PR descriptions, including the
+incident detail in this public repo. Both branches were pushed and review
+handoffs created: [upstream proposal PR](https://github.com/kcrobinson-1/shared-agent-rules/pull/4)
+and [consumer routing PR](https://github.com/kcrobinson-1/music-curator-app/pull/12).
+The earlier rejection records the first attempt; publication approval is no
+longer pending. This proposal remains subject to maintainer acceptance.
+Upstream merge, CalVer release and the deliberate consumer pin bump remain
+pending as described above.
