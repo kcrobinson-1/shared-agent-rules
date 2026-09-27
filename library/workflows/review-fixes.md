@@ -6,69 +6,59 @@ this on top of the implementation workflow for code-side fixes.
 ## Review-Fix Rigor
 
 Review-fix commits do not get a lighter diligence standard than
-the original implementation. Treat them as full-quality
-engineering work, not as quick patches.
+the original implementation. Apply the same design, validation and
+self-review depth for the affected surface. Before committing a fix
+or reporting a comment addressed, complete the following steps.
 
-- Run the same design and self-review depth on a review fix that
-  you would run on the original implementation for the same
-  surface area.
-- Do not accept a review fix that introduces a new bug at a
-  higher severity than the issue being addressed; explicitly
-  check for that before committing.
-- When a fix adds a new async step, follow-up read, fallback
-  path, or external dependency, review the success path, the
-  originally reported bug, the inverse case, transient failure
-  of the new dependency, and partial-success semantics.
-- Add or update focused coverage for the new edge introduced by
-  the fix, not only for the reviewer's reported reproduction.
+## Diagnose, sweep the contract and validate
 
-## Audit for siblings of the same class
+1. **Diagnose the violation and origin.** Name the violated contract.
+   Use reproductions and version history where available to distinguish
+   an original defect from a regression introduced by a correction.
+   Describe the observable miss: an alternate path, combined field
+   change, transaction composition, incorrect assumption, coverage gap
+   or correction regression. State unknown causes as unknown; do not
+   invent explanations for a reviewer or model's internal reasoning.
+2. **Sweep paths sharing the contract.** Apply the
+   [self-review correctness guidance](../self-review/how-to-use.md#correctness)
+   to other paths sharing that contract, including relevant unchanged
+   code. Look for related defects and regressions caused by the
+   correction. Keep implementation changes within the authorized scope;
+   report findings outside it through the repo's follow-up surface.[^siblings-example]
+3. **Validate the failure and legitimate counterexamples.** Verify the
+   reported violation and successful operations the correction could
+   break. Use focused tests, probes or code-level proof appropriate to
+   the contract, adding composition, failure/retry or concurrency checks
+   when relevant. For a new async step, follow-up read, fallback or
+   external dependency, check transient failure and partial success.
+   A successful write must not appear failed because a best-effort
+   follow-up read or reconciliation failed, unless the contract makes
+   the operation atomic. Do not accept a correction that introduces a
+   higher-severity bug than the reported issue.
+4. **Record the evidence and its limits.** Name the invariant, paths
+   checked, tests/probes or code-level proof, related findings, what
+   existing verification missed and material remaining gaps. Distinguish
+   known evidence from uncertainty; a passing gate alone does not
+   establish complete contract coverage. Keep incident history in the
+   session log and mechanical regression protection in tests. New audits
+   still follow the existing [catalog lifecycle](../self-review/mechanism.md#lifecycle).
 
-After fixing a reviewer-surfaced defect, audit the rest of the
-diff (and, when applicable, the larger plan or branch) for
-siblings of the same class before committing the fix. Reviewer
-feedback usually surfaces one instance of a recurring mistake;
-the same mistake often lives in places the reviewer didn't reach.
-
-Ask: "what category of mistake is this, and where else might that
-category live?" Then check those places. Catching the second
-instance pre-emptively saves the next reviewer round.[^siblings-example]
-
-[^siblings-example]: In the source codebase this rule came from,
-    one reviewer surfaced a "treating tool output as proof
-    without checking what it proves" defect in one paragraph of a
-    plan doc; the same defect lived two paragraphs later in an
-    unrelated check, and was only caught on the second review
-    round because the first sweep didn't look for siblings.
-    Consumers can replace this footnote with their own incident.
-
-## New-bug check before committing
-
-Before committing a review fix, answer:
-
-- "What new bug could this fix create?"
-- "Could this make a successful operation look failed?"
-
-The second question catches a recurring class of failure where a
-fix to surface an error case starts surfacing the error for
-operations that actually succeeded — a write that landed gets
-reported as failed because a follow-up read fired before
-replication caught up, for instance. If a write already
-succeeded, do not let a best-effort follow-up read or
-reconciliation step make the overall operation appear failed
-unless the contract explicitly says the flow is atomic.
+[^siblings-example]: Illustrative: a reviewer found a plan paragraph treating
+    tool output as proof without checking what it proved. Another paragraph
+    made the same mistake; a sweep of that verification contract would have
+    found it before a second review round. Consumers can replace this example.
 
 ## Review-thread state discipline
 
 When addressing review feedback, keep the review surface readable
 for humans.
 
-- After pushing a fix for a specific review thread, reply on
-  that exact thread with a short summary of what changed and the
-  commit reference that addressed it.
-- If a thread is pushback or defer rather than a code fix, reply
-  on the thread with the rationale instead of leaving the
-  decision only in local handoff text.
+- When the user has authorized posting, reply after pushing on the
+  exact review thread with the cause, correction, broader checks,
+  evidence and commit reference, plus any material uncertainty.
+  Reporting the comment addressed follows the quality work above.
+- For pushback or deferral, an authorized reply gives the rationale;
+  otherwise keep the decision in the local handoff.
 - Do not resolve threads, submit a review, or mark conversations
   resolved unless the user explicitly asks for that write
   action.
@@ -91,8 +81,8 @@ same wherever review threads carry state.[^review-surface]
 
 - [`../self-review/how-to-use.md`](../self-review/how-to-use.md)
   for the self-review the original implementation should have
-  run; review fixes apply the same audits and add the
-  sibling-class sweep above.
+  run; review fixes apply the same audits through the contract sweep
+  above.
 - [`debugging.md`](debugging.md) when the review feedback is
   about a failing check rather than a code defect.
 

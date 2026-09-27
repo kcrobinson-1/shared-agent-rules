@@ -3,6 +3,15 @@
 Consumer-visible changes per version. Versions use the CalVer
 format `YYYY-MM-DD` (see [`VERSIONING.md`](VERSIONING.md)).
 
+## Unreleased
+
+- Review affected behaviors and invariants across relevant unchanged paths,
+  including lifecycle composition and legitimate counterexamples.
+- Consolidate review-fix sibling and new-bug checks into diagnosis, contract
+  sweep, validation and evidence; distinguish original defects from correction
+  regressions and keep external replies conditional on authorization.
+- Preserve the existing audit lifecycle; no new permanent audit is added.
+
 ## v2026-05-15 — Initial release
 
 The first shipped version. Library content derived from a
