@@ -29,16 +29,22 @@ misses the categories that catch real bugs.
 
 ### Correctness
 
-The diff is correct and complete:
+Review the affected behavior or invariant, including relevant unchanged
+callers, writers, consumers and enforcement paths. Bound the review by the
+shared contract or dependency; a broader read does not authorize unrelated
+implementation changes.
 
 - Correctness of the change itself.
 - Regressions in any existing flow the diff touches.
 - Readability and maintainability of the new code.
 - Duplicated logic introduced by the change.
-- Complete call-site coverage: when a function signature
-  changes or a new parameter is added, audit every call site
-  including error, retry, and fallback paths — not just the
-  primary happy path.
+- Complete contract coverage: when a signature or parameter changes,
+  audit every relevant call site, including error, retry and fallback
+  paths. For lifecycle, authorization or persistence changes, trace
+  entry, transitions, composed operations and relevant failure or
+  concurrency paths. Check legitimate behavior the change could break;
+  when correcting a defect, also verify the violation. A passing gate
+  alone does not prove this coverage.
 - Whether the final change is still positive value for the
   codebase and should be merged, rather than being needless
   churn or noise that offsets its benefit.
